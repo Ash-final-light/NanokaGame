@@ -1,0 +1,21 @@
+{
+    "name": "NanokaGame.Klotski.EditModeTests",
+    "rootNamespace": "NanokaGame.Tests.EditMode.Klotski",
+    "references": [
+        "NanokaGame.Klotski.Core"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false,
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ]
+}
