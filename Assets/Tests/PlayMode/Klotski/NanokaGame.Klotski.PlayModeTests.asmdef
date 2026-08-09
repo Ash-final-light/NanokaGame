@@ -3,7 +3,8 @@
     "rootNamespace": "NanokaGame.Tests.PlayMode.Klotski",
     "references": [
         "NanokaGame.Klotski.Core",
-        "NanokaGame.Klotski.Presentation"
+        "NanokaGame.Klotski.Presentation",
+        "UnityEngine.UI"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -1,18 +1,27 @@
 using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace NanokaGame.Games.Klotski
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(SpriteRenderer))]
-    public sealed class KlotskiPieceView : MonoBehaviour
+    [RequireComponent(typeof(BoxCollider2D))]
+    public sealed class KlotskiPieceView : MonoBehaviour,
+        IPointerDownHandler,
+        IBeginDragHandler,
+        IDragHandler,
+        IPointerUpHandler,
+        IEndDragHandler
     {
         [SerializeField] private string _pieceId;
         [SerializeField] private SpriteRenderer _spriteRenderer;
+        [SerializeField] private BoxCollider2D _inputCollider;
 
         private Color _baseColor = Color.white;
         private int _baseSortingOrder;
         private bool _hasBaseVisualState;
+        private KlotskiGameController _inputController;
 
         public string PieceId
         {
@@ -22,6 +31,11 @@ namespace NanokaGame.Games.Klotski
         public SpriteRenderer SpriteRenderer
         {
             get { return _spriteRenderer; }
+        }
+
+        public BoxCollider2D InputCollider
+        {
+            get { return _inputCollider; }
         }
 
         public bool IsConfigured
@@ -50,7 +64,14 @@ namespace NanokaGame.Games.Klotski
 
             _pieceId = pieceId;
             _spriteRenderer = spriteRenderer;
+            EnsureInputColliderReference();
             CaptureBaseVisualState();
+            SyncInputCollider();
+        }
+
+        public void BindInputController(KlotskiGameController inputController)
+        {
+            _inputController = inputController;
         }
 
         public void ApplyLayout(KlotskiPieceState piece, KlotskiBoardLayout layout)
@@ -110,10 +131,73 @@ namespace NanokaGame.Games.Klotski
             if (_spriteRenderer.drawMode == SpriteDrawMode.Simple)
             {
                 ApplySimpleSpriteWorldSize(targetWorldSize);
+                SyncInputCollider();
                 return;
             }
 
             ApplyResizableSpriteWorldSize(targetWorldSize);
+            SyncInputCollider();
+        }
+
+        public void SyncInputCollider()
+        {
+            EnsureRendererReference();
+            EnsureInputColliderReference();
+
+            if (_inputCollider == null)
+            {
+                return;
+            }
+
+            Bounds localBounds = _spriteRenderer.localBounds;
+            if (localBounds.size.x <= Mathf.Epsilon || localBounds.size.y <= Mathf.Epsilon)
+            {
+                return;
+            }
+
+            _inputCollider.isTrigger = true;
+            _inputCollider.offset = new Vector2(localBounds.center.x, localBounds.center.y);
+            _inputCollider.size = new Vector2(localBounds.size.x, localBounds.size.y);
+        }
+
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            KlotskiGameController controller = ResolveInputController();
+            if (controller != null)
+            {
+                controller.TryBeginDrag(this, eventData);
+            }
+        }
+
+        public void OnBeginDrag(PointerEventData eventData)
+        {
+        }
+
+        public void OnDrag(PointerEventData eventData)
+        {
+            KlotskiGameController controller = ResolveInputController();
+            if (controller != null)
+            {
+                controller.UpdateDrag(eventData);
+            }
+        }
+
+        public void OnPointerUp(PointerEventData eventData)
+        {
+            KlotskiGameController controller = ResolveInputController();
+            if (controller != null)
+            {
+                controller.ReleaseDrag(eventData);
+            }
+        }
+
+        public void OnEndDrag(PointerEventData eventData)
+        {
+            KlotskiGameController controller = ResolveInputController();
+            if (controller != null)
+            {
+                controller.CancelDrag(this, eventData.pointerId);
+            }
         }
 
         public void SetSelected(bool isSelected, Color selectedColor, int sortingOrderOffset)
@@ -154,23 +238,38 @@ namespace NanokaGame.Games.Klotski
         private void Awake()
         {
             EnsureRendererReference();
+            EnsureInputColliderReference();
             CaptureBaseVisualState();
+            SyncInputCollider();
         }
 
         private void Reset()
         {
             _pieceId = gameObject.name;
             _spriteRenderer = GetComponent<SpriteRenderer>();
+            _inputCollider = GetComponent<BoxCollider2D>();
             CaptureBaseVisualState();
+            SyncInputCollider();
         }
 
         private void OnValidate()
         {
             EnsureRendererReference();
+            EnsureInputColliderReference();
 
             if (string.IsNullOrWhiteSpace(_pieceId))
             {
                 _pieceId = gameObject.name;
+            }
+
+            SyncInputCollider();
+        }
+
+        private void OnDisable()
+        {
+            if (_inputController != null)
+            {
+                _inputController.CancelDrag(this);
             }
         }
 
@@ -238,6 +337,24 @@ namespace NanokaGame.Games.Klotski
                 throw new InvalidOperationException(
                     string.Format("KlotskiPieceView on '{0}' requires a SpriteRenderer.", gameObject.name));
             }
+        }
+
+        private void EnsureInputColliderReference()
+        {
+            if (_inputCollider == null)
+            {
+                _inputCollider = GetComponent<BoxCollider2D>();
+            }
+        }
+
+        private KlotskiGameController ResolveInputController()
+        {
+            if (_inputController == null)
+            {
+                _inputController = GetComponentInParent<KlotskiGameController>();
+            }
+
+            return _inputController;
         }
 
         private void EnsureBaseVisualState()

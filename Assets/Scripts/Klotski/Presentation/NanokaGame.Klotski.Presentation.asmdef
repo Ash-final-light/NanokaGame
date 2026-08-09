@@ -2,7 +2,8 @@
     "name": "NanokaGame.Klotski.Presentation",
     "rootNamespace": "NanokaGame.Games.Klotski",
     "references": [
-        "NanokaGame.Klotski.Core"
+        "NanokaGame.Klotski.Core",
+        "UnityEngine.UI"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

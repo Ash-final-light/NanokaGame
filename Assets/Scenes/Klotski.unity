@@ -392,6 +392,7 @@ GameObject:
   - component: {fileID: 243480051}
   - component: {fileID: 243480050}
   - component: {fileID: 243480052}
+  - component: {fileID: 243480053}
   m_Layer: 0
   m_Name: nanoka_skirt_right
   m_TagString: Untagged
@@ -480,6 +481,52 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _pieceId: nanoka_skirt_right
   _spriteRenderer: {fileID: 243480050}
+  _inputCollider: {fileID: 243480053}
+--- !u!61 &243480053
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 243480049}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 6, y: 6}
+    newSize: {x: 6, y: 6}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 6, y: 6}
+  m_EdgeRadius: 0
 --- !u!1 &290519951
 GameObject:
   m_ObjectHideFlags: 0
@@ -491,6 +538,7 @@ GameObject:
   - component: {fileID: 290519953}
   - component: {fileID: 290519952}
   - component: {fileID: 290519954}
+  - component: {fileID: 290519955}
   m_Layer: 0
   m_Name: nanoka_body_left
   m_TagString: Untagged
@@ -579,6 +627,52 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _pieceId: nanoka_body_left
   _spriteRenderer: {fileID: 290519952}
+  _inputCollider: {fileID: 290519955}
+--- !u!61 &290519955
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 290519951}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 6, y: 6}
+    newSize: {x: 6, y: 6}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 6, y: 6}
+  m_EdgeRadius: 0
 --- !u!1 &292035754
 GameObject:
   m_ObjectHideFlags: 0
@@ -707,6 +801,7 @@ GameObject:
   - component: {fileID: 385263028}
   - component: {fileID: 385263027}
   - component: {fileID: 385263029}
+  - component: {fileID: 385263030}
   m_Layer: 0
   m_Name: nanoka_left_arm
   m_TagString: Untagged
@@ -795,6 +890,52 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _pieceId: nanoka_left_arm
   _spriteRenderer: {fileID: 385263027}
+  _inputCollider: {fileID: 385263030}
+--- !u!61 &385263030
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 385263026}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 6, y: 12}
+    newSize: {x: 6, y: 12}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 6, y: 12}
+  m_EdgeRadius: 0
 --- !u!1 &532214751
 GameObject:
   m_ObjectHideFlags: 0
@@ -1137,6 +1278,7 @@ GameObject:
   - component: {fileID: 798027144}
   - component: {fileID: 798027143}
   - component: {fileID: 798027145}
+  - component: {fileID: 798027146}
   m_Layer: 0
   m_Name: nanoka_left_leg
   m_TagString: Untagged
@@ -1225,6 +1367,52 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _pieceId: nanoka_left_leg
   _spriteRenderer: {fileID: 798027143}
+  _inputCollider: {fileID: 798027146}
+--- !u!61 &798027146
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 798027142}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 6, y: 12}
+    newSize: {x: 6, y: 12}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 6, y: 12}
+  m_EdgeRadius: 0
 --- !u!1 &810014761
 GameObject:
   m_ObjectHideFlags: 0
@@ -1311,6 +1499,7 @@ GameObject:
   - component: {fileID: 841488164}
   - component: {fileID: 841488163}
   - component: {fileID: 841488165}
+  - component: {fileID: 841488166}
   m_Layer: 0
   m_Name: nanoka_body
   m_TagString: Untagged
@@ -1399,6 +1588,52 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _pieceId: nanoka_body
   _spriteRenderer: {fileID: 841488163}
+  _inputCollider: {fileID: 841488166}
+--- !u!61 &841488166
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 841488162}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 12, y: 6}
+    newSize: {x: 6, y: 12}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 12, y: 6}
+  m_EdgeRadius: 0
 --- !u!1 &910595962
 GameObject:
   m_ObjectHideFlags: 0
@@ -1482,6 +1717,7 @@ GameObject:
   - component: {fileID: 942369745}
   - component: {fileID: 942369744}
   - component: {fileID: 942369746}
+  - component: {fileID: 942369747}
   m_Layer: 0
   m_Name: nanoka_right_arm
   m_TagString: Untagged
@@ -1570,6 +1806,52 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _pieceId: nanoka_right_arm
   _spriteRenderer: {fileID: 942369744}
+  _inputCollider: {fileID: 942369747}
+--- !u!61 &942369747
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 942369743}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 6, y: 12}
+    newSize: {x: 6, y: 12}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 6, y: 12}
+  m_EdgeRadius: 0
 --- !u!1 &956616180
 GameObject:
   m_ObjectHideFlags: 0
@@ -1581,6 +1863,7 @@ GameObject:
   - component: {fileID: 956616182}
   - component: {fileID: 956616181}
   - component: {fileID: 956616183}
+  - component: {fileID: 956616184}
   m_Layer: 0
   m_Name: nanoka_body_right
   m_TagString: Untagged
@@ -1669,6 +1952,52 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _pieceId: nanoka_body_right
   _spriteRenderer: {fileID: 956616181}
+  _inputCollider: {fileID: 956616184}
+--- !u!61 &956616184
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 956616180}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 6, y: 6}
+    newSize: {x: 6, y: 6}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 6, y: 6}
+  m_EdgeRadius: 0
 --- !u!1 &960098031
 GameObject:
   m_ObjectHideFlags: 0
@@ -2026,6 +2355,7 @@ GameObject:
   - component: {fileID: 1125246779}
   - component: {fileID: 1125246778}
   - component: {fileID: 1125246780}
+  - component: {fileID: 1125246781}
   m_Layer: 0
   m_Name: nanoka_right_leg
   m_TagString: Untagged
@@ -2114,6 +2444,52 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _pieceId: nanoka_right_leg
   _spriteRenderer: {fileID: 1125246778}
+  _inputCollider: {fileID: 1125246781}
+--- !u!61 &1125246781
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1125246777}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 6, y: 12}
+    newSize: {x: 6, y: 12}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 6, y: 12}
+  m_EdgeRadius: 0
 --- !u!224 &1226944973 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7432536609183101623, guid: 8d01b749de7557d4eb502effbca14e85, type: 3}
@@ -2450,6 +2826,7 @@ GameObject:
   - component: {fileID: 1519558780}
   - component: {fileID: 1519558779}
   - component: {fileID: 1519558781}
+  - component: {fileID: 1519558782}
   m_Layer: 0
   m_Name: nanoka_head
   m_TagString: Untagged
@@ -2538,6 +2915,52 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _pieceId: nanoka_head
   _spriteRenderer: {fileID: 1519558779}
+  _inputCollider: {fileID: 1519558782}
+--- !u!61 &1519558782
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1519558778}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 12, y: 12}
+    newSize: {x: 12, y: 12}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 12, y: 12}
+  m_EdgeRadius: 0
 --- !u!1 &1538236373
 GameObject:
   m_ObjectHideFlags: 0
@@ -3177,10 +3600,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _boardView: {fileID: 1925826705}
   _topLeftAnchorRenderer: {fileID: 385263027}
+  _inputCamera: {fileID: 1987043859}
   _cellSize: 1.68
   _pieceGap: 0
   _boardPlaneZ: 0
   _initializeOnAwake: 1
+  _dragThresholdRatio: 0.12
+  _commitThresholdRatio: 0.35
+  _selectedColor: {r: 1, g: 1, b: 1, a: 1}
+  _selectedSortingOrderOffset: 10
 --- !u!114 &1925826705
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3217,6 +3645,7 @@ GameObject:
   - component: {fileID: 1959375574}
   - component: {fileID: 1959375573}
   - component: {fileID: 1959375575}
+  - component: {fileID: 1959375576}
   m_Layer: 0
   m_Name: nanoka_skirt_left
   m_TagString: Untagged
@@ -3305,6 +3734,52 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _pieceId: nanoka_skirt_left
   _spriteRenderer: {fileID: 1959375573}
+  _inputCollider: {fileID: 1959375576}
+--- !u!61 &1959375576
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1959375572}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 6, y: 6}
+    newSize: {x: 6, y: 6}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 6, y: 6}
+  m_EdgeRadius: 0
 --- !u!1 &1987043857
 GameObject:
   m_ObjectHideFlags: 0
@@ -3317,6 +3792,7 @@ GameObject:
   - component: {fileID: 1987043859}
   - component: {fileID: 1987043858}
   - component: {fileID: 1987043861}
+  - component: {fileID: 1987043862}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -3442,6 +3918,22 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!114 &1987043862
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1987043857}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56666c5a40171f54783dd416a44f42bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EventMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_MaxRayIntersections: 0
 --- !u!1 &2104942701
 GameObject:
   m_ObjectHideFlags: 0
