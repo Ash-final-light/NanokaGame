@@ -2,7 +2,8 @@
     "name": "NanokaGame.Klotski.EditModeTests",
     "rootNamespace": "NanokaGame.Tests.EditMode.Klotski",
     "references": [
-        "NanokaGame.Klotski.Core"
+        "NanokaGame.Klotski.Core",
+        "NanokaGame.Klotski.Presentation"
     ],
     "includePlatforms": [
         "Editor"

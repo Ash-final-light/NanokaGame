@@ -1,0 +1,16 @@
+{
+    "name": "NanokaGame.Klotski.Presentation",
+    "rootNamespace": "NanokaGame.Games.Klotski",
+    "references": [
+        "NanokaGame.Klotski.Core"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
