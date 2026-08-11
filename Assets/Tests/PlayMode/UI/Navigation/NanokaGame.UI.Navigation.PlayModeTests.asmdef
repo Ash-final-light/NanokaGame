@@ -1,0 +1,20 @@
+{
+    "name": "NanokaGame.UI.Navigation.PlayModeTests",
+    "rootNamespace": "NanokaGame.Tests.PlayMode.UI",
+    "references": [
+        "NanokaGame.UI.Navigation",
+        "UnityEngine.UI"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false,
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ]
+}
