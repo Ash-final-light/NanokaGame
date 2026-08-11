@@ -3,7 +3,8 @@
     "rootNamespace": "NanokaGame.Games.Klotski",
     "references": [
         "NanokaGame.Klotski.Core",
-        "UnityEngine.UI"
+        "UnityEngine.UI",
+        "Unity.TextMeshPro"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using DG.Tweening;
+using NanokaGame.Games.Klotski.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 namespace NanokaGame.Games.Klotski
 {
@@ -25,6 +27,7 @@ namespace NanokaGame.Games.Klotski
         [SerializeField] private int _selectedSortingOrderOffset = 10;
         [SerializeField] private float _legalMoveDuration = 0.15f;
         [SerializeField] private float _invalidReturnDuration = 0.12f;
+        [SerializeField] private KlotskiHudView _hudView;
 
         private KlotskiBoardModel _model;
         private KlotskiBoardLayout _layout;
@@ -44,6 +47,12 @@ namespace NanokaGame.Games.Klotski
         private Tween _activeMoveTween;
         private KlotskiPieceView _movingPieceView;
         private string _movingPieceId;
+        private KlotskiGameState _state = KlotskiGameState.Initializing;
+        private int _moveCount;
+        private double _elapsedTimeSeconds;
+        private bool _timerRunning;
+        private bool _completionPresented;
+        private int _lastDisplayedSecond = -1;
 
         public bool IsInitialized
         {
@@ -62,7 +71,22 @@ namespace NanokaGame.Games.Klotski
 
         public bool CanAcceptInput
         {
-            get { return IsInitialized && !IsDragging && !IsMoving && !_model.IsCompleted; }
+            get { return IsInitialized && _state == KlotskiGameState.Ready; }
+        }
+
+        public KlotskiGameState State
+        {
+            get { return _state; }
+        }
+
+        public int MoveCount
+        {
+            get { return _moveCount; }
+        }
+
+        public double ElapsedTimeSeconds
+        {
+            get { return _elapsedTimeSeconds; }
         }
 
         public int ActivePointerId
@@ -162,8 +186,14 @@ namespace NanokaGame.Games.Klotski
             _invalidReturnDuration = invalidReturnDuration;
         }
 
+        public void ConfigureHud(KlotskiHudView hudView)
+        {
+            _hudView = hudView;
+        }
+
         public void InitializeGame()
         {
+            _state = KlotskiGameState.Initializing;
             CancelAllInteractionAndSync();
             EnsureReferences();
 
@@ -178,14 +208,22 @@ namespace NanokaGame.Games.Klotski
                 _boardPlaneZ);
             _boardView.Initialize(_model, _layout);
             BindPieceInputs();
+            ResetProgress();
+            _state = KlotskiGameState.Ready;
+            BindHud();
+            RefreshHud(true);
         }
 
         public void ResetGame()
         {
             EnsureInitialized();
+            _state = KlotskiGameState.Initializing;
             CancelAllInteractionAndSync();
             _model.Reset();
             _boardView.SyncAllViews();
+            ResetProgress();
+            _state = KlotskiGameState.Ready;
+            RefreshHud(true);
         }
 
         public void SyncAllViews()
@@ -193,6 +231,16 @@ namespace NanokaGame.Games.Klotski
             EnsureInitialized();
             CancelAllInteractionAndSync();
             _boardView.SyncAllViews();
+            StabilizeGameState();
+            RefreshHud(false);
+        }
+
+        public void ExitToTitle()
+        {
+            _state = KlotskiGameState.Initializing;
+            _timerRunning = false;
+            CancelAllInteractionAndSync();
+            SceneManager.LoadScene("Title");
         }
 
         public bool TryBeginDrag(KlotskiPieceView pieceView, PointerEventData eventData)
@@ -254,6 +302,7 @@ namespace NanokaGame.Games.Klotski
 
             _activePieceView.SetWorldPosition(_dragStartWorldPosition);
             _activePieceView.SetSelected(true, _selectedColor, _selectedSortingOrderOffset);
+            _state = KlotskiGameState.Dragging;
             return true;
         }
 
@@ -427,7 +476,36 @@ namespace NanokaGame.Games.Klotski
                 cancelled = true;
             }
 
+            if (cancelled)
+            {
+                StabilizeGameState();
+            }
+
             return cancelled;
+        }
+
+        private void Update()
+        {
+            if (!_timerRunning || _state == KlotskiGameState.Completed)
+            {
+                return;
+            }
+
+            _elapsedTimeSeconds += Time.unscaledDeltaTime;
+            int displayedSecond = Mathf.FloorToInt((float)_elapsedTimeSeconds);
+            if (displayedSecond != _lastDisplayedSecond)
+            {
+                _lastDisplayedSecond = displayedSecond;
+                RefreshHud(false);
+            }
+        }
+
+        private void OnEnable()
+        {
+            if (IsInitialized)
+            {
+                BindHud();
+            }
         }
 
         private void Awake()
@@ -441,6 +519,12 @@ namespace NanokaGame.Games.Klotski
         private void OnDisable()
         {
             CancelAllInteractionAndSync();
+            _timerRunning = false;
+
+            if (_hudView != null)
+            {
+                _hudView.Unbind(this);
+            }
         }
 
         private void OnApplicationFocus(bool hasFocus)
@@ -448,6 +532,7 @@ namespace NanokaGame.Games.Klotski
             if (!hasFocus)
             {
                 CancelAllInteractionAndSync();
+                StabilizeGameState();
             }
         }
 
@@ -519,10 +604,17 @@ namespace NanokaGame.Games.Klotski
         {
             KlotskiPieceView pieceView = _activePieceView;
             string pieceId = _activePieceId;
+
+            if (moveResult == KlotskiMoveResult.Success)
+            {
+                RegisterSuccessfulMove();
+            }
+
             ClearDragState();
 
             if (pieceView == null || _model == null || _layout == null)
             {
+                StabilizeGameState();
                 return moveResult;
             }
 
@@ -530,6 +622,7 @@ namespace NanokaGame.Games.Klotski
             if (!_model.TryGetPiece(pieceId, out piece))
             {
                 pieceView.RestoreVisualState();
+                StabilizeGameState();
                 return moveResult;
             }
 
@@ -542,6 +635,7 @@ namespace NanokaGame.Games.Klotski
             {
                 pieceView.SetWorldPosition(targetPosition);
                 pieceView.RestoreVisualState();
+                CompleteInteractionPresentation();
                 return moveResult;
             }
 
@@ -557,6 +651,9 @@ namespace NanokaGame.Games.Klotski
             KlotskiMoveResult moveResult)
         {
             CancelActiveAnimationAndSync();
+            _state = _model.IsCompleted
+                ? KlotskiGameState.Completed
+                : KlotskiGameState.Moving;
             _movingPieceView = pieceView;
             _movingPieceId = pieceId;
             _activeMoveTween = pieceView.transform
@@ -572,6 +669,7 @@ namespace NanokaGame.Games.Klotski
             string pieceId = _movingPieceId;
             ClearAnimationState();
             SyncPieceToModel(pieceView, pieceId);
+            CompleteInteractionPresentation();
         }
 
         private void HandleActiveAnimationKilled()
@@ -585,6 +683,7 @@ namespace NanokaGame.Games.Klotski
             string pieceId = _movingPieceId;
             ClearAnimationState();
             SyncPieceToModel(pieceView, pieceId);
+            CompleteInteractionPresentation();
         }
 
         private void CancelAllInteractionAndSync()
@@ -654,6 +753,91 @@ namespace NanokaGame.Games.Klotski
             _activeMoveTween = null;
             _movingPieceView = null;
             _movingPieceId = null;
+        }
+
+        private void RegisterSuccessfulMove()
+        {
+            _moveCount++;
+
+            if (!_timerRunning && !_model.IsCompleted)
+            {
+                _timerRunning = true;
+            }
+
+            if (_model.IsCompleted)
+            {
+                _timerRunning = false;
+                _state = KlotskiGameState.Completed;
+            }
+
+            RefreshHud(false);
+        }
+
+        private void CompleteInteractionPresentation()
+        {
+            StabilizeGameState();
+
+            if (_state == KlotskiGameState.Completed && !_completionPresented)
+            {
+                _completionPresented = true;
+
+                if (_hudView != null)
+                {
+                    _hudView.ShowCompleted(_moveCount, _elapsedTimeSeconds);
+                }
+            }
+        }
+
+        private void StabilizeGameState()
+        {
+            if (!IsInitialized)
+            {
+                _state = KlotskiGameState.Initializing;
+                return;
+            }
+
+            _state = _model.IsCompleted
+                ? KlotskiGameState.Completed
+                : KlotskiGameState.Ready;
+
+            if (_state == KlotskiGameState.Completed)
+            {
+                _timerRunning = false;
+            }
+        }
+
+        private void ResetProgress()
+        {
+            _moveCount = 0;
+            _elapsedTimeSeconds = 0d;
+            _timerRunning = false;
+            _completionPresented = false;
+            _lastDisplayedSecond = 0;
+        }
+
+        private void BindHud()
+        {
+            if (_hudView != null)
+            {
+                _hudView.Bind(this);
+            }
+        }
+
+        private void RefreshHud(bool hideCompletion)
+        {
+            if (_hudView == null)
+            {
+                return;
+            }
+
+            if (hideCompletion)
+            {
+                _hudView.ShowReady(_moveCount, _elapsedTimeSeconds);
+            }
+            else
+            {
+                _hudView.SetCounters(_moveCount, _elapsedTimeSeconds);
+            }
         }
 
         private void ClearDragState()
