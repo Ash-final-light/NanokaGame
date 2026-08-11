@@ -1104,6 +1104,10 @@ Klotski_BG/Root_Complete
 - 胜利音效只在首次进入完成状态时播放一次；
 - 重置和退出时正确停止需要停止的临时音效。
 
+当前实现使用 `Pieces/KlotskiAudioFeedback` 集中管理华容道音效，并复用同一对象上的一个 2D `AudioSource`。棋子 View 不直接播放音效；合法移动、非法移动和胜利由 `KlotskiGameController` 在状态确定后触发，按钮通过 HUD 绑定到 Controller 的请求方法。退出按钮使用自动销毁的一次性 2D AudioSource，使取消音效不会因立即切换到 Title 场景而被截断。
+
+当前项目尚未创建 `NanokaGame.Audio`、AudioMixer 或全局 SFX Mixer Group，因此 `AudioSource.outputAudioMixerGroup` 暂时为空。后续实现通用音频设置时，应把该 AudioSource 绑定到统一 SFX Group；在此之前不得把“响应全局 SFX 音量”标记为已经完成。
+
 ### 21.13 第一版不实现
 
 除非用户后续明确要求，第一版不实现：
@@ -1173,7 +1177,8 @@ Klotski_BG/Root_Complete
 - [x] 胜利事件只触发一次；
 - [x] 胜利后停止时间和输入；
 - [x] 完成 UI 显示最终步数与时间；
-- [ ] 移动、无效和胜利音效正确响应全局 SFX 音量。
+- [x] 普通按钮、取消按钮、移动、无效和胜利音效按固定映射各播放一次；
+- [ ] 创建全局音频设置后，将华容道 AudioSource 绑定到 SFX Mixer Group 并响应全局 SFX 音量。
 
 ### 22.5 工程质量
 

@@ -62,6 +62,8 @@ namespace NanokaGame.Tests.PlayMode.Klotski
             Assert.That(fixture.Controller.MoveCount, Is.EqualTo(1));
             Assert.That(fixture.StepText.text, Is.EqualTo("1"));
             Assert.That(fixture.Controller.State, Is.EqualTo(KlotskiGameState.Ready));
+            Assert.That(fixture.AudioFeedback.PlayCount, Is.EqualTo(1));
+            Assert.That(fixture.AudioFeedback.LastPlayedClip, Is.SameAs(fixture.MoveClip));
 
             yield return new WaitForSecondsRealtime(0.05f);
 
@@ -87,6 +89,8 @@ namespace NanokaGame.Tests.PlayMode.Klotski
             Assert.That(fixture.Controller.MoveCount, Is.Zero);
             Assert.That(fixture.Controller.ElapsedTimeSeconds, Is.Zero);
             Assert.That(fixture.StepText.text, Is.EqualTo("0"));
+            Assert.That(fixture.AudioFeedback.PlayCount, Is.EqualTo(1));
+            Assert.That(fixture.AudioFeedback.LastPlayedClip, Is.SameAs(fixture.AlertClip));
         }
 
         [UnityTest]
@@ -112,6 +116,39 @@ namespace NanokaGame.Tests.PlayMode.Klotski
             Assert.That(fixture.StepText.text, Is.EqualTo("0"));
             Assert.That(fixture.TimeText.text, Is.EqualTo("00:00"));
             Assert.That(fixture.CompletionRoot.activeSelf, Is.False);
+            Assert.That(fixture.AudioFeedback.PlayCount, Is.EqualTo(1));
+            Assert.That(fixture.AudioFeedback.LastPlayedClip, Is.SameAs(fixture.MoveClip));
+        }
+
+        [UnityTest]
+        public IEnumerator RestartButton_AfterLegalMove_ResetsGameAndPlaysChoiceOnce()
+        {
+            FlowFixture fixture = CreateFixture();
+            yield return null;
+
+            KlotskiPieceView view = fixture.FindView("nanoka_body_left");
+            Vector3 startPosition = view.transform.position;
+            fixture.Controller.TryBeginDrag(view, PointerId, startPosition);
+            fixture.Controller.ReleaseDrag(PointerId, startPosition + Vector3.down * 0.8f);
+
+            fixture.RestartButton.onClick.Invoke();
+
+            Assert.That(fixture.Controller.State, Is.EqualTo(KlotskiGameState.Ready));
+            Assert.That(fixture.Controller.MoveCount, Is.Zero);
+            Assert.That(fixture.AudioFeedback.PlayCount, Is.EqualTo(2));
+            Assert.That(fixture.AudioFeedback.LastPlayedClip, Is.SameAs(fixture.ChoiceClip));
+        }
+
+        [UnityTest]
+        public IEnumerator PlayCancel_WhenRequested_UsesCancelClipOnce()
+        {
+            FlowFixture fixture = CreateFixture();
+            yield return null;
+
+            fixture.AudioFeedback.PlayCancel();
+
+            Assert.That(fixture.AudioFeedback.PlayCount, Is.EqualTo(1));
+            Assert.That(fixture.AudioFeedback.LastPlayedClip, Is.SameAs(fixture.CancelClip));
         }
 
         [UnityTest]
@@ -134,6 +171,8 @@ namespace NanokaGame.Tests.PlayMode.Klotski
             Assert.That(fixture.Controller.CanAcceptInput, Is.False);
             Assert.That(fixture.Controller.MoveCount, Is.EqualTo(1));
             Assert.That(fixture.CompletionRoot.activeSelf, Is.True);
+            Assert.That(fixture.AudioFeedback.PlayCount, Is.EqualTo(2));
+            Assert.That(fixture.AudioFeedback.LastPlayedClip, Is.SameAs(fixture.VictoryClip));
             Assert.That(fixture.CompletionStepText.text, Is.EqualTo("步数：1"));
             Assert.That(fixture.CompletionTimeText.text, Does.StartWith("用时："));
             Assert.That(
@@ -191,9 +230,25 @@ namespace NanokaGame.Tests.PlayMode.Klotski
 
             KlotskiBoardView boardView = root.AddComponent<KlotskiBoardView>();
             boardView.Configure(views, "Default", 0);
+            AudioSource audioSource = root.AddComponent<AudioSource>();
+            audioSource.mute = true;
+            AudioClip choiceClip = CreateAudioClip("Choice");
+            AudioClip cancelClip = CreateAudioClip("Cancel");
+            AudioClip moveClip = CreateAudioClip("Move");
+            AudioClip alertClip = CreateAudioClip("Alert");
+            AudioClip victoryClip = CreateAudioClip("Victory");
+            KlotskiAudioFeedback audioFeedback = root.AddComponent<KlotskiAudioFeedback>();
+            audioFeedback.Configure(
+                audioSource,
+                choiceClip,
+                cancelClip,
+                moveClip,
+                alertClip,
+                victoryClip);
             KlotskiGameController controller = root.AddComponent<KlotskiGameController>();
             controller.Configure(boardView, anchorRenderer, 1.68f, 0f, 0f, false);
             controller.ConfigureAnimationDurations(0f, 0f);
+            controller.ConfigureAudioFeedback(audioFeedback);
             KlotskiHudView hudView = root.AddComponent<KlotskiHudView>();
             hudView.Configure(
                 controller,
@@ -218,7 +273,21 @@ namespace NanokaGame.Tests.PlayMode.Klotski
                 timeText,
                 completionRoot,
                 completionTimeText,
-                completionStepText);
+                completionStepText,
+                restartButton,
+                audioFeedback,
+                choiceClip,
+                cancelClip,
+                moveClip,
+                alertClip,
+                victoryClip);
+        }
+
+        private AudioClip CreateAudioClip(string name)
+        {
+            AudioClip clip = AudioClip.Create(name, 4410, 1, 44100, false);
+            _createdObjects.Add(clip);
+            return clip;
         }
 
         private static TMP_Text CreateText(Transform parent, string name)
@@ -245,7 +314,14 @@ namespace NanokaGame.Tests.PlayMode.Klotski
                 TMP_Text timeText,
                 GameObject completionRoot,
                 TMP_Text completionTimeText,
-                TMP_Text completionStepText)
+                TMP_Text completionStepText,
+                Button restartButton,
+                KlotskiAudioFeedback audioFeedback,
+                AudioClip choiceClip,
+                AudioClip cancelClip,
+                AudioClip moveClip,
+                AudioClip alertClip,
+                AudioClip victoryClip)
             {
                 Controller = controller;
                 BoardView = boardView;
@@ -255,6 +331,13 @@ namespace NanokaGame.Tests.PlayMode.Klotski
                 CompletionRoot = completionRoot;
                 CompletionTimeText = completionTimeText;
                 CompletionStepText = completionStepText;
+                RestartButton = restartButton;
+                AudioFeedback = audioFeedback;
+                ChoiceClip = choiceClip;
+                CancelClip = cancelClip;
+                MoveClip = moveClip;
+                AlertClip = alertClip;
+                VictoryClip = victoryClip;
             }
 
             public KlotskiGameController Controller { get; }
@@ -272,6 +355,20 @@ namespace NanokaGame.Tests.PlayMode.Klotski
             public TMP_Text CompletionTimeText { get; }
 
             public TMP_Text CompletionStepText { get; }
+
+            public Button RestartButton { get; }
+
+            public KlotskiAudioFeedback AudioFeedback { get; }
+
+            public AudioClip ChoiceClip { get; }
+
+            public AudioClip CancelClip { get; }
+
+            public AudioClip MoveClip { get; }
+
+            public AudioClip AlertClip { get; }
+
+            public AudioClip VictoryClip { get; }
 
             public KlotskiPieceView FindView(string pieceId)
             {

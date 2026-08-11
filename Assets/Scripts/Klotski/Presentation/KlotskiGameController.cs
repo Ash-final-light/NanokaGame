@@ -28,6 +28,7 @@ namespace NanokaGame.Games.Klotski
         [SerializeField] private float _legalMoveDuration = 0.15f;
         [SerializeField] private float _invalidReturnDuration = 0.12f;
         [SerializeField] private KlotskiHudView _hudView;
+        [SerializeField] private KlotskiAudioFeedback _audioFeedback;
 
         private KlotskiBoardModel _model;
         private KlotskiBoardLayout _layout;
@@ -119,6 +120,11 @@ namespace NanokaGame.Games.Klotski
             get { return _boardView; }
         }
 
+        public KlotskiAudioFeedback AudioFeedback
+        {
+            get { return _audioFeedback; }
+        }
+
         public void Configure(
             KlotskiBoardView boardView,
             SpriteRenderer topLeftAnchorRenderer,
@@ -191,6 +197,11 @@ namespace NanokaGame.Games.Klotski
             _hudView = hudView;
         }
 
+        public void ConfigureAudioFeedback(KlotskiAudioFeedback audioFeedback)
+        {
+            _audioFeedback = audioFeedback;
+        }
+
         public void InitializeGame()
         {
             _state = KlotskiGameState.Initializing;
@@ -217,6 +228,7 @@ namespace NanokaGame.Games.Klotski
         public void ResetGame()
         {
             EnsureInitialized();
+            StopAudioFeedback();
             _state = KlotskiGameState.Initializing;
             CancelAllInteractionAndSync();
             _model.Reset();
@@ -224,6 +236,16 @@ namespace NanokaGame.Games.Klotski
             ResetProgress();
             _state = KlotskiGameState.Ready;
             RefreshHud(true);
+        }
+
+        public void RequestReset()
+        {
+            ResetGame();
+
+            if (_audioFeedback != null)
+            {
+                _audioFeedback.PlayChoice();
+            }
         }
 
         public void SyncAllViews()
@@ -237,10 +259,23 @@ namespace NanokaGame.Games.Klotski
 
         public void ExitToTitle()
         {
+            StopAudioFeedback();
             _state = KlotskiGameState.Initializing;
             _timerRunning = false;
             CancelAllInteractionAndSync();
             SceneManager.LoadScene("Title");
+        }
+
+        public void RequestExitToTitle()
+        {
+            StopAudioFeedback();
+
+            if (_audioFeedback != null)
+            {
+                _audioFeedback.PlayCancelAcrossSceneLoad();
+            }
+
+            ExitToTitle();
         }
 
         public bool TryBeginDrag(KlotskiPieceView pieceView, PointerEventData eventData)
@@ -608,6 +643,15 @@ namespace NanokaGame.Games.Klotski
             if (moveResult == KlotskiMoveResult.Success)
             {
                 RegisterSuccessfulMove();
+
+                if (_audioFeedback != null)
+                {
+                    _audioFeedback.PlayMove();
+                }
+            }
+            else if (_audioFeedback != null)
+            {
+                _audioFeedback.PlayAlert();
             }
 
             ClearDragState();
@@ -781,6 +825,11 @@ namespace NanokaGame.Games.Klotski
             {
                 _completionPresented = true;
 
+                if (_audioFeedback != null)
+                {
+                    _audioFeedback.PlayVictory();
+                }
+
                 if (_hudView != null)
                 {
                     _hudView.ShowCompleted(_moveCount, _elapsedTimeSeconds);
@@ -939,6 +988,19 @@ namespace NanokaGame.Games.Klotski
             if (_inputCamera == null)
             {
                 _inputCamera = Camera.main;
+            }
+
+            if (_audioFeedback == null)
+            {
+                _audioFeedback = GetComponent<KlotskiAudioFeedback>();
+            }
+        }
+
+        private void StopAudioFeedback()
+        {
+            if (_audioFeedback != null)
+            {
+                _audioFeedback.StopAll();
             }
         }
 

@@ -59,10 +59,10 @@ namespace NanokaGame.Games.Klotski.UI
 
             Unbind();
             _boundController = controller;
-            AddButtonListener(_exitButton, controller.ExitToTitle);
-            AddButtonListener(_restartButton, controller.ResetGame);
-            AddButtonListener(_completionRestartButton, controller.ResetGame);
-            AddButtonListener(_completionTitleButton, controller.ExitToTitle);
+            AddButtonListener(_exitButton, controller.RequestExitToTitle);
+            AddButtonListener(_restartButton, controller.RequestReset);
+            AddButtonListener(_completionRestartButton, controller.RequestReset);
+            AddButtonListener(_completionTitleButton, controller.RequestExitToTitle);
         }
 
         public void Unbind(KlotskiGameController controller)
@@ -148,10 +148,10 @@ namespace NanokaGame.Games.Klotski.UI
                 return;
             }
 
-            RemoveButtonListener(_exitButton, _boundController.ExitToTitle);
-            RemoveButtonListener(_restartButton, _boundController.ResetGame);
-            RemoveButtonListener(_completionRestartButton, _boundController.ResetGame);
-            RemoveButtonListener(_completionTitleButton, _boundController.ExitToTitle);
+            RemoveButtonListener(_exitButton, _boundController.RequestExitToTitle);
+            RemoveButtonListener(_restartButton, _boundController.RequestReset);
+            RemoveButtonListener(_completionRestartButton, _boundController.RequestReset);
+            RemoveButtonListener(_completionTitleButton, _boundController.RequestExitToTitle);
             _boundController = null;
         }
 
