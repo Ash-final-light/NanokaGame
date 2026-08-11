@@ -1,0 +1,19 @@
+{
+    "name": "NanokaGame.Audio.PlayModeTests",
+    "rootNamespace": "NanokaGame.Tests.PlayMode.Audio",
+    "references": [
+        "NanokaGame.Audio"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false,
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ]
+}
