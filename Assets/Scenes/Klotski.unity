@@ -3609,6 +3609,8 @@ MonoBehaviour:
   _commitThresholdRatio: 0.35
   _selectedColor: {r: 1, g: 1, b: 1, a: 1}
   _selectedSortingOrderOffset: 10
+  _legalMoveDuration: 0.15
+  _invalidReturnDuration: 0.12
 --- !u!114 &1925826705
 MonoBehaviour:
   m_ObjectHideFlags: 0

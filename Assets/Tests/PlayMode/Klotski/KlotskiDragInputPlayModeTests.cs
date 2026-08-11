@@ -11,6 +11,8 @@ namespace NanokaGame.Tests.PlayMode.Klotski
     public sealed class KlotskiDragInputPlayModeTests
     {
         private const float Tolerance = 0.0001f;
+        private const float AnimationDuration = 0.05f;
+        private const int TestPointerId = 17;
         private readonly List<UnityEngine.Object> _createdObjects = new List<UnityEngine.Object>();
 
         [UnityTearDown]
@@ -71,11 +73,124 @@ namespace NanokaGame.Tests.PlayMode.Klotski
 
             Assert.That(piece.Cell, Is.EqualTo(new Vector2Int(1, 0)));
             Assert.That(fixture.Controller.IsDragging, Is.False);
+            Assert.That(fixture.Controller.IsMoving, Is.True);
+            Assert.That(fixture.Controller.CanAcceptInput, Is.False);
             Vector3 expectedPosition = fixture.Controller.Layout.GetPieceWorldPosition(
                 piece.Cell,
                 piece.SizeInCells);
+            yield return new WaitForSeconds(AnimationDuration + 0.05f);
+
+            Assert.That(fixture.Controller.IsMoving, Is.False);
             Assert.That(view.transform.position.x, Is.EqualTo(expectedPosition.x).Within(Tolerance));
             Assert.That(view.transform.position.y, Is.EqualTo(expectedPosition.y).Within(Tolerance));
+        }
+
+        [UnityTest]
+        public IEnumerator TryBeginDrag_WhileMoveTweenIsActive_ReturnsFalse()
+        {
+            DragFixture fixture = CreateFixture(null);
+            yield return null;
+
+            StartLegalMove(fixture);
+
+            Assert.That(fixture.Controller.IsMoving, Is.True);
+            Assert.That(
+                fixture.Controller.TryBeginDrag(
+                    fixture.BodyLeftView,
+                    TestPointerId + 1,
+                    fixture.BodyLeftView.transform.position),
+                Is.False);
+        }
+
+        [UnityTest]
+        public IEnumerator ReleaseDrag_WhenMoveIsInvalid_TweensBackWithoutChangingModel()
+        {
+            DragFixture fixture = CreateFixture(null);
+            yield return null;
+
+            KlotskiPieceView view = fixture.BodyLeftView;
+            Vector3 startPosition = view.transform.position;
+            fixture.Controller.TryBeginDrag(view, TestPointerId, startPosition);
+
+            KlotskiMoveResult result = fixture.Controller.ReleaseDrag(
+                TestPointerId,
+                startPosition + Vector3.down * 0.4f);
+
+            KlotskiPieceState piece;
+            Assert.That(fixture.Controller.Model.TryGetPiece(view.PieceId, out piece), Is.True);
+            Assert.That(result, Is.EqualTo(KlotskiMoveResult.InvalidDistance));
+            Assert.That(piece.Cell, Is.EqualTo(new Vector2Int(1, 1)));
+            Assert.That(fixture.Controller.IsMoving, Is.True);
+            Assert.That(view.transform.position.y, Is.LessThan(startPosition.y));
+
+            yield return new WaitForSeconds(AnimationDuration + 0.05f);
+
+            Assert.That(fixture.Controller.IsMoving, Is.False);
+            AssertVector3(view.transform.position, startPosition);
+        }
+
+        [UnityTest]
+        public IEnumerator ResetGame_WhileTweenIsActive_KillsTweenAndRestoresInitialState()
+        {
+            DragFixture fixture = CreateFixture(null);
+            yield return null;
+
+            StartLegalMove(fixture);
+            Assert.That(fixture.Controller.IsMoving, Is.True);
+
+            fixture.Controller.ResetGame();
+
+            KlotskiPieceState piece;
+            Assert.That(fixture.Controller.Model.TryGetPiece(fixture.BodyLeftView.PieceId, out piece), Is.True);
+            Assert.That(fixture.Controller.IsMoving, Is.False);
+            Assert.That(piece.Cell, Is.EqualTo(new Vector2Int(1, 1)));
+            AssertVector3(
+                fixture.BodyLeftView.transform.position,
+                fixture.Controller.Layout.GetPieceWorldPosition(piece.Cell, piece.SizeInCells));
+        }
+
+        [UnityTest]
+        public IEnumerator DisableController_WhileTweenIsActive_KillsTweenAndAlignsViewToModel()
+        {
+            DragFixture fixture = CreateFixture(null);
+            yield return null;
+
+            StartLegalMove(fixture);
+            Assert.That(fixture.Controller.IsMoving, Is.True);
+
+            fixture.Controller.enabled = false;
+
+            KlotskiPieceState piece;
+            Assert.That(fixture.Controller.Model.TryGetPiece(fixture.BodyLeftView.PieceId, out piece), Is.True);
+            Assert.That(fixture.Controller.IsMoving, Is.False);
+            Assert.That(piece.Cell, Is.EqualTo(new Vector2Int(1, 0)));
+            AssertVector3(
+                fixture.BodyLeftView.transform.position,
+                fixture.Controller.Layout.GetPieceWorldPosition(piece.Cell, piece.SizeInCells));
+        }
+
+        private static void StartLegalMove(DragFixture fixture)
+        {
+            Vector3 startPosition = fixture.BodyLeftView.transform.position;
+            Assert.That(
+                fixture.Controller.TryBeginDrag(
+                    fixture.BodyLeftView,
+                    TestPointerId,
+                    startPosition),
+                Is.True);
+
+            KlotskiMoveResult result = fixture.Controller.ReleaseDrag(
+                TestPointerId,
+                startPosition + Vector3.down * 0.8f);
+
+            Assert.That(result, Is.EqualTo(KlotskiMoveResult.Success));
+        }
+
+        private static void AssertVector3(Vector3 actual, Vector3 expected)
+        {
+            Assert.That(actual.x, Is.EqualTo(expected.x).Within(Tolerance), "X");
+            Assert.That(actual.y, Is.EqualTo(expected.y).Within(Tolerance), "Y");
+            Assert.That(actual.z, Is.EqualTo(expected.z).Within(Tolerance), "Z");
         }
 
         private Camera CreateInputCamera()
@@ -143,6 +258,7 @@ namespace NanokaGame.Tests.PlayMode.Klotski
             boardView.Configure(views, "Default", 0);
             KlotskiGameController controller = root.AddComponent<KlotskiGameController>();
             controller.Configure(boardView, anchorRenderer, 1.68f, 0f, 0f, true);
+            controller.ConfigureAnimationDurations(AnimationDuration, AnimationDuration);
             controller.ConfigureInputCamera(inputCamera);
             root.SetActive(true);
 

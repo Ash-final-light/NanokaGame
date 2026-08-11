@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -22,6 +23,8 @@ namespace NanokaGame.Games.Klotski
         [SerializeField] private float _commitThresholdRatio = 0.35f;
         [SerializeField] private Color _selectedColor = Color.white;
         [SerializeField] private int _selectedSortingOrderOffset = 10;
+        [SerializeField] private float _legalMoveDuration = 0.15f;
+        [SerializeField] private float _invalidReturnDuration = 0.12f;
 
         private KlotskiBoardModel _model;
         private KlotskiBoardLayout _layout;
@@ -38,6 +41,9 @@ namespace NanokaGame.Games.Klotski
         private int _maxMoveUp;
         private int _maxMoveDown;
         private KlotskiDragAxis _dragAxis;
+        private Tween _activeMoveTween;
+        private KlotskiPieceView _movingPieceView;
+        private string _movingPieceId;
 
         public bool IsInitialized
         {
@@ -49,9 +55,14 @@ namespace NanokaGame.Games.Klotski
             get { return _activePieceView != null; }
         }
 
+        public bool IsMoving
+        {
+            get { return _movingPieceView != null; }
+        }
+
         public bool CanAcceptInput
         {
-            get { return IsInitialized && !IsDragging && !_model.IsCompleted; }
+            get { return IsInitialized && !IsDragging && !IsMoving && !_model.IsCompleted; }
         }
 
         public int ActivePointerId
@@ -141,9 +152,19 @@ namespace NanokaGame.Games.Klotski
             _inputCamera = inputCamera;
         }
 
+        public void ConfigureAnimationDurations(
+            float legalMoveDuration,
+            float invalidReturnDuration)
+        {
+            ValidateAnimationDuration(legalMoveDuration, nameof(legalMoveDuration));
+            ValidateAnimationDuration(invalidReturnDuration, nameof(invalidReturnDuration));
+            _legalMoveDuration = legalMoveDuration;
+            _invalidReturnDuration = invalidReturnDuration;
+        }
+
         public void InitializeGame()
         {
-            CancelActiveDrag();
+            CancelAllInteractionAndSync();
             EnsureReferences();
 
             KlotskiLevelDefinition level = KlotskiLevelDefinition.CreateDefault();
@@ -162,7 +183,7 @@ namespace NanokaGame.Games.Klotski
         public void ResetGame()
         {
             EnsureInitialized();
-            CancelActiveDrag();
+            CancelAllInteractionAndSync();
             _model.Reset();
             _boardView.SyncAllViews();
         }
@@ -170,7 +191,7 @@ namespace NanokaGame.Games.Klotski
         public void SyncAllViews()
         {
             EnsureInitialized();
-            CancelActiveDrag();
+            CancelAllInteractionAndSync();
             _boardView.SyncAllViews();
         }
 
@@ -390,6 +411,25 @@ namespace NanokaGame.Games.Klotski
             return true;
         }
 
+        public bool CancelInteraction(KlotskiPieceView pieceView)
+        {
+            bool cancelled = false;
+
+            if (_activePieceView == pieceView)
+            {
+                CancelActiveDragImmediately();
+                cancelled = true;
+            }
+
+            if (_movingPieceView == pieceView)
+            {
+                CancelActiveAnimationAndSync();
+                cancelled = true;
+            }
+
+            return cancelled;
+        }
+
         private void Awake()
         {
             if (_initializeOnAwake)
@@ -400,14 +440,14 @@ namespace NanokaGame.Games.Klotski
 
         private void OnDisable()
         {
-            CancelActiveDrag();
+            CancelAllInteractionAndSync();
         }
 
         private void OnApplicationFocus(bool hasFocus)
         {
             if (!hasFocus)
             {
-                CancelActiveDrag();
+                CancelAllInteractionAndSync();
             }
         }
 
@@ -421,6 +461,8 @@ namespace NanokaGame.Games.Klotski
             _dragThresholdRatio = Mathf.Clamp(_dragThresholdRatio, 0.01f, 1f);
             _commitThresholdRatio = Mathf.Clamp(_commitThresholdRatio, 0.01f, 1f);
             _selectedSortingOrderOffset = Mathf.Max(0, _selectedSortingOrderOffset);
+            _legalMoveDuration = SanitizeAnimationDuration(_legalMoveDuration, 0.15f);
+            _invalidReturnDuration = SanitizeAnimationDuration(_invalidReturnDuration, 0.12f);
             RefreshReferences();
         }
 
@@ -477,28 +519,141 @@ namespace NanokaGame.Games.Klotski
         {
             KlotskiPieceView pieceView = _activePieceView;
             string pieceId = _activePieceId;
+            ClearDragState();
 
-            if (pieceView != null && _boardView != null && _boardView.IsInitialized)
+            if (pieceView == null || _model == null || _layout == null)
             {
-                KlotskiPieceState piece;
-                if (_model != null && _model.TryGetPiece(pieceId, out piece))
-                {
-                    _boardView.SyncPiece(pieceId);
-                }
-
-                pieceView.RestoreVisualState();
+                return moveResult;
             }
 
-            ClearDragState();
+            KlotskiPieceState piece;
+            if (!_model.TryGetPiece(pieceId, out piece))
+            {
+                pieceView.RestoreVisualState();
+                return moveResult;
+            }
+
+            Vector3 targetPosition = _layout.GetPieceWorldPosition(piece.Cell, piece.SizeInCells);
+            float duration = moveResult == KlotskiMoveResult.Success
+                ? _legalMoveDuration
+                : _invalidReturnDuration;
+
+            if (duration <= 0f || !isActiveAndEnabled || !pieceView.gameObject.activeInHierarchy)
+            {
+                pieceView.SetWorldPosition(targetPosition);
+                pieceView.RestoreVisualState();
+                return moveResult;
+            }
+
+            StartMoveAnimation(pieceView, pieceId, targetPosition, duration, moveResult);
             return moveResult;
         }
 
-        private void CancelActiveDrag()
+        private void StartMoveAnimation(
+            KlotskiPieceView pieceView,
+            string pieceId,
+            Vector3 targetPosition,
+            float duration,
+            KlotskiMoveResult moveResult)
         {
-            if (IsDragging)
+            CancelActiveAnimationAndSync();
+            _movingPieceView = pieceView;
+            _movingPieceId = pieceId;
+            _activeMoveTween = pieceView.transform
+                .DOMove(targetPosition, duration)
+                .SetEase(moveResult == KlotskiMoveResult.Success ? Ease.OutCubic : Ease.OutQuad)
+                .OnComplete(CompleteActiveAnimation)
+                .OnKill(HandleActiveAnimationKilled);
+        }
+
+        private void CompleteActiveAnimation()
+        {
+            KlotskiPieceView pieceView = _movingPieceView;
+            string pieceId = _movingPieceId;
+            ClearAnimationState();
+            SyncPieceToModel(pieceView, pieceId);
+        }
+
+        private void HandleActiveAnimationKilled()
+        {
+            if (!IsMoving)
             {
-                FinishActiveDrag(KlotskiMoveResult.InvalidDistance);
+                return;
             }
+
+            KlotskiPieceView pieceView = _movingPieceView;
+            string pieceId = _movingPieceId;
+            ClearAnimationState();
+            SyncPieceToModel(pieceView, pieceId);
+        }
+
+        private void CancelAllInteractionAndSync()
+        {
+            CancelActiveDragImmediately();
+            CancelActiveAnimationAndSync();
+        }
+
+        private void CancelActiveDragImmediately()
+        {
+            if (!IsDragging)
+            {
+                return;
+            }
+
+            KlotskiPieceView pieceView = _activePieceView;
+            string pieceId = _activePieceId;
+            ClearDragState();
+            SyncPieceToModel(pieceView, pieceId);
+        }
+
+        private void CancelActiveAnimationAndSync()
+        {
+            if (!IsMoving)
+            {
+                return;
+            }
+
+            Tween moveTween = _activeMoveTween;
+            KlotskiPieceView pieceView = _movingPieceView;
+            string pieceId = _movingPieceId;
+            ClearAnimationState();
+
+            if (moveTween != null && moveTween.IsActive())
+            {
+                moveTween.Kill(false);
+            }
+
+            SyncPieceToModel(pieceView, pieceId);
+        }
+
+        private void SyncPieceToModel(KlotskiPieceView pieceView, string pieceId)
+        {
+            if (pieceView == null)
+            {
+                return;
+            }
+
+            if (_boardView != null &&
+                _boardView.IsInitialized &&
+                _model != null &&
+                !string.IsNullOrWhiteSpace(pieceId))
+            {
+                KlotskiPieceState piece;
+                if (_model.TryGetPiece(pieceId, out piece))
+                {
+                    pieceView.SetWorldPosition(
+                        _layout.GetPieceWorldPosition(piece.Cell, piece.SizeInCells));
+                }
+            }
+
+            pieceView.RestoreVisualState();
+        }
+
+        private void ClearAnimationState()
+        {
+            _activeMoveTween = null;
+            _movingPieceView = null;
+            _movingPieceId = null;
         }
 
         private void ClearDragState()
@@ -625,6 +780,24 @@ namespace NanokaGame.Games.Klotski
             {
                 throw new InvalidOperationException("KlotskiGameController has not been initialized.");
             }
+        }
+
+        private static void ValidateAnimationDuration(float duration, string parameterName)
+        {
+            if (float.IsNaN(duration) || float.IsInfinity(duration) || duration < 0f)
+            {
+                throw new ArgumentOutOfRangeException(
+                    parameterName,
+                    duration,
+                    "Animation duration must be finite and cannot be negative.");
+            }
+        }
+
+        private static float SanitizeAnimationDuration(float duration, float defaultDuration)
+        {
+            return float.IsNaN(duration) || float.IsInfinity(duration)
+                ? defaultDuration
+                : Mathf.Max(0f, duration);
         }
     }
 }

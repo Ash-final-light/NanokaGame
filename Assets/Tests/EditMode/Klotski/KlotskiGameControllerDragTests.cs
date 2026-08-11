@@ -259,6 +259,7 @@ namespace NanokaGame.Tests.EditMode.Klotski
             boardView.Configure(views, "Default", 0);
             KlotskiGameController controller = root.AddComponent<KlotskiGameController>();
             controller.Configure(boardView, anchorRenderer, 1.68f, 0f, 0f, false);
+            controller.ConfigureAnimationDurations(0f, 0f);
             controller.InitializeGame();
 
             return new DragFixture(controller, views);

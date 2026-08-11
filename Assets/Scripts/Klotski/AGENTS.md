@@ -1149,7 +1149,7 @@ Klotski_BG/Root_Complete
 - [x] 松手非法时回到原格；
 - [x] Pointer Cancel 后恢复 Model 对应位置；
 - [x] 多指不会同时控制多个棋子；
-- [ ] 动画期间不能重复提交移动。
+- [x] 动画期间不能重复提交移动。
 
 ### 22.3 规则
 
@@ -1160,7 +1160,7 @@ Klotski_BG/Root_Complete
 - [x] 不能重叠；
 - [x] 不能穿过其他棋子；
 - [x] 多格移动会逐格检查路径；
-- [ ] Model 与 View 在低帧率和 Tween 中断后仍一致。
+- [x] Model 与 View 在低帧率和 Tween 中断后仍一致。
 
 ### 22.4 UI 与流程
 

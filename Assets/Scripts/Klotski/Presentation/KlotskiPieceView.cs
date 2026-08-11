@@ -269,7 +269,7 @@ namespace NanokaGame.Games.Klotski
         {
             if (_inputController != null)
             {
-                _inputController.CancelDrag(this);
+                _inputController.CancelInteraction(this);
             }
         }
 
