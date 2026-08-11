@@ -99,6 +99,13 @@ namespace NanokaGame.Audio
             ApplySavedSettings();
         }
 
+        private void Start()
+        {
+            // Mixer snapshots can be restored after Awake during scene startup.
+            // Reapply once in Start so the persisted values remain authoritative.
+            ApplySavedSettings();
+        }
+
         private void OnEnable()
         {
             Bind();
