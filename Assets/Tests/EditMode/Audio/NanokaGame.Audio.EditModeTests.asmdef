@@ -1,11 +1,12 @@
 {
-    "name": "NanokaGame.Audio.PlayModeTests",
-    "rootNamespace": "NanokaGame.Tests.PlayMode.Audio",
+    "name": "NanokaGame.Audio.EditModeTests",
+    "rootNamespace": "NanokaGame.Tests.EditMode.Audio",
     "references": [
-        "NanokaGame.Audio",
-        "UnityEngine.UI"
+        "NanokaGame.Audio"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

@@ -1,7 +1,9 @@
 {
     "name": "NanokaGame.Audio",
     "rootNamespace": "NanokaGame.Audio",
-    "references": [],
+    "references": [
+        "UnityEngine.UI"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
