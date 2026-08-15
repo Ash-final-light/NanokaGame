@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace NanokaGame.UI
@@ -14,21 +15,26 @@ namespace NanokaGame.UI
     {
         private const float MinimumDuration = 0.01f;
 
-        [SerializeField] private Image _progressImage;
+        [FormerlySerializedAs("_progressImage")]
+        [SerializeField] private Image _progressFillImage;
         [SerializeField] private GameObject _checkObject;
+        [SerializeField] private AudioSource _completionAudioSource;
+        [SerializeField] private AudioClip _completionClip;
         [SerializeField] private float _holdDuration = 1.5f;
+        [SerializeField] private float _decayDuration = 1.5f;
         [SerializeField] private float _quitDelay = 1f;
         [SerializeField] private bool _quitApplication = true;
 
         private Coroutine _quitRoutine;
-        private float _elapsedHoldTime;
+        private float _holdProgress;
         private bool _isHolding;
         private bool _isCompleted;
         private bool _quitRequested;
+        private int _completionSoundPlayCount;
 
         public float HoldProgress
         {
-            get { return _progressImage != null ? _progressImage.fillAmount : 0f; }
+            get { return _holdProgress; }
         }
 
         public bool IsHolding
@@ -46,16 +52,24 @@ namespace NanokaGame.UI
             get { return _quitRequested; }
         }
 
+        public int CompletionSoundPlayCount
+        {
+            get { return _completionSoundPlayCount; }
+        }
+
         public void Configure(
-            Image progressImage,
+            Image progressFillImage,
             GameObject checkObject,
             float holdDuration,
+            float decayDuration,
             float quitDelay,
+            AudioSource completionAudioSource,
+            AudioClip completionClip,
             bool quitApplication = true)
         {
-            if (progressImage == null)
+            if (progressFillImage == null)
             {
-                throw new ArgumentNullException(nameof(progressImage));
+                throw new ArgumentNullException(nameof(progressFillImage));
             }
 
             if (checkObject == null)
@@ -70,6 +84,13 @@ namespace NanokaGame.UI
                     $"Hold duration must be at least {MinimumDuration} seconds.");
             }
 
+            if (decayDuration < MinimumDuration)
+            {
+                throw new ArgumentOutOfRangeException(
+                    nameof(decayDuration),
+                    $"Decay duration must be at least {MinimumDuration} seconds.");
+            }
+
             if (quitDelay < 0f)
             {
                 throw new ArgumentOutOfRangeException(
@@ -77,10 +98,23 @@ namespace NanokaGame.UI
                     "Quit delay must not be negative.");
             }
 
+            if (completionAudioSource == null)
+            {
+                throw new ArgumentNullException(nameof(completionAudioSource));
+            }
+
+            if (completionClip == null)
+            {
+                throw new ArgumentNullException(nameof(completionClip));
+            }
+
             StopQuitRoutine();
-            _progressImage = progressImage;
+            _progressFillImage = progressFillImage;
             _checkObject = checkObject;
+            _completionAudioSource = completionAudioSource;
+            _completionClip = completionClip;
             _holdDuration = holdDuration;
+            _decayDuration = decayDuration;
             _quitDelay = quitDelay;
             _quitApplication = quitApplication;
             ResetInteraction();
@@ -103,20 +137,19 @@ namespace NanokaGame.UI
                 return;
             }
 
-            _elapsedHoldTime = 0f;
             _isHolding = true;
             _checkObject.SetActive(false);
-            ApplyProgress(0f);
+            ApplyProgress(_holdProgress);
         }
 
         public void OnPointerUp(PointerEventData eventData)
         {
-            CancelIncompleteHold();
+            StopHolding();
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            CancelIncompleteHold();
+            StopHolding();
         }
 
         private void Awake()
@@ -126,17 +159,31 @@ namespace NanokaGame.UI
 
         private void Update()
         {
-            if (!_isHolding || _isCompleted)
+            if (_isCompleted)
             {
                 return;
             }
 
-            _elapsedHoldTime += Time.unscaledDeltaTime;
-            ApplyProgress(_elapsedHoldTime / _holdDuration);
-
-            if (_elapsedHoldTime >= _holdDuration)
+            if (_isHolding)
             {
-                CompleteHold();
+                _holdProgress += Time.unscaledDeltaTime / _holdDuration;
+                ApplyProgress(_holdProgress);
+
+                if (_holdProgress >= 1f)
+                {
+                    CompleteHold();
+                }
+
+                return;
+            }
+
+            if (_holdProgress > 0f)
+            {
+                _holdProgress = Mathf.MoveTowards(
+                    _holdProgress,
+                    0f,
+                    Time.unscaledDeltaTime / _decayDuration);
+                ApplyProgress(_holdProgress);
             }
         }
 
@@ -149,6 +196,7 @@ namespace NanokaGame.UI
         private void OnValidate()
         {
             _holdDuration = Mathf.Max(MinimumDuration, _holdDuration);
+            _decayDuration = Mathf.Max(MinimumDuration, _decayDuration);
             _quitDelay = Mathf.Max(0f, _quitDelay);
         }
 
@@ -156,7 +204,9 @@ namespace NanokaGame.UI
         {
             _isHolding = false;
             _isCompleted = true;
+            _holdProgress = 1f;
             ApplyProgress(1f);
+            PlayCompletionSound();
             _checkObject.SetActive(true);
             _quitRoutine = StartCoroutine(QuitAfterDelay());
         }
@@ -177,7 +227,7 @@ namespace NanokaGame.UI
             }
         }
 
-        private void CancelIncompleteHold()
+        private void StopHolding()
         {
             if (!_isHolding || _isCompleted)
             {
@@ -185,16 +235,15 @@ namespace NanokaGame.UI
             }
 
             _isHolding = false;
-            _elapsedHoldTime = 0f;
-            ApplyProgress(0f);
         }
 
         private void ResetInteraction()
         {
-            _elapsedHoldTime = 0f;
+            _holdProgress = 0f;
             _isHolding = false;
             _isCompleted = false;
             _quitRequested = false;
+            _completionSoundPlayCount = 0;
             ApplyProgress(0f);
 
             if (_checkObject != null)
@@ -205,10 +254,23 @@ namespace NanokaGame.UI
 
         private void ApplyProgress(float progress)
         {
-            if (_progressImage != null)
+            _holdProgress = Mathf.Clamp01(progress);
+
+            if (_progressFillImage != null)
             {
-                _progressImage.fillAmount = Mathf.Clamp01(progress);
+                _progressFillImage.fillAmount = _holdProgress;
             }
+        }
+
+        private void PlayCompletionSound()
+        {
+            if (_completionAudioSource == null || _completionClip == null)
+            {
+                return;
+            }
+
+            _completionAudioSource.PlayOneShot(_completionClip);
+            _completionSoundPlayCount++;
         }
 
         private void StopQuitRoutine()
@@ -226,10 +288,10 @@ namespace NanokaGame.UI
         {
             bool isValid = true;
 
-            if (_progressImage == null)
+            if (_progressFillImage == null)
             {
                 Debug.LogError(
-                    $"{nameof(HoldToQuitButton)} on '{name}' requires a progress Image.",
+                    $"{nameof(HoldToQuitButton)} on '{name}' requires a progress fill Image.",
                     this);
                 isValid = false;
             }
@@ -238,6 +300,22 @@ namespace NanokaGame.UI
             {
                 Debug.LogError(
                     $"{nameof(HoldToQuitButton)} on '{name}' requires a check object.",
+                    this);
+                isValid = false;
+            }
+
+            if (_completionAudioSource == null)
+            {
+                Debug.LogError(
+                    $"{nameof(HoldToQuitButton)} on '{name}' requires a completion AudioSource.",
+                    this);
+                isValid = false;
+            }
+
+            if (_completionClip == null)
+            {
+                Debug.LogError(
+                    $"{nameof(HoldToQuitButton)} on '{name}' requires a completion AudioClip.",
                     this);
                 isValid = false;
             }
