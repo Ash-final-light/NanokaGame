@@ -1,0 +1,21 @@
+{
+    "name": "NanokaGame.Jigsaw.PlayModeTests",
+    "rootNamespace": "NanokaGame.Tests.PlayMode.Jigsaw",
+    "references": [
+        "NanokaGame.Jigsaw",
+        "UnityEngine.UI",
+        "Unity.TextMeshPro"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false,
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ]
+}
