@@ -14,6 +14,7 @@ namespace NanokaGame.UI
         IPointerExitHandler
     {
         private const float MinimumDuration = 0.01f;
+        private const int NoPointerId = int.MinValue;
 
         [FormerlySerializedAs("_progressImage")]
         [SerializeField] private Image _progressFillImage;
@@ -24,6 +25,7 @@ namespace NanokaGame.UI
         [SerializeField] private float _decayDuration = 1.5f;
         [SerializeField] private float _quitDelay = 1f;
         [SerializeField] private bool _quitApplication = true;
+        [SerializeField] private bool _hideOnIos = true;
 
         private Coroutine _quitRoutine;
         private float _holdProgress;
@@ -31,6 +33,7 @@ namespace NanokaGame.UI
         private bool _isCompleted;
         private bool _quitRequested;
         private int _completionSoundPlayCount;
+        private int _activePointerId = NoPointerId;
 
         public float HoldProgress
         {
@@ -55,6 +58,18 @@ namespace NanokaGame.UI
         public int CompletionSoundPlayCount
         {
             get { return _completionSoundPlayCount; }
+        }
+
+        public int ActivePointerId
+        {
+            get { return _activePointerId; }
+        }
+
+        public static bool ShouldHideOnPlatform(
+            RuntimePlatform platform,
+            bool hideOnIos)
+        {
+            return hideOnIos && platform == RuntimePlatform.IPhonePlayer;
         }
 
         public void Configure(
@@ -137,6 +152,7 @@ namespace NanokaGame.UI
                 return;
             }
 
+            _activePointerId = GetPointerId(eventData);
             _isHolding = true;
             _checkObject.SetActive(false);
             ApplyProgress(_holdProgress);
@@ -144,16 +160,32 @@ namespace NanokaGame.UI
 
         public void OnPointerUp(PointerEventData eventData)
         {
+            if (!IsActivePointer(eventData))
+            {
+                return;
+            }
+
             StopHolding();
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
+            if (!IsActivePointer(eventData))
+            {
+                return;
+            }
+
             StopHolding();
         }
 
         private void Awake()
         {
+            if (ShouldHideOnPlatform(Application.platform, _hideOnIos))
+            {
+                gameObject.SetActive(false);
+                return;
+            }
+
             ResetInteraction();
         }
 
@@ -193,6 +225,22 @@ namespace NanokaGame.UI
             ResetInteraction();
         }
 
+        private void OnApplicationFocus(bool hasFocus)
+        {
+            if (!hasFocus)
+            {
+                StopHolding();
+            }
+        }
+
+        private void OnApplicationPause(bool pauseStatus)
+        {
+            if (pauseStatus)
+            {
+                StopHolding();
+            }
+        }
+
         private void OnValidate()
         {
             _holdDuration = Mathf.Max(MinimumDuration, _holdDuration);
@@ -204,6 +252,7 @@ namespace NanokaGame.UI
         {
             _isHolding = false;
             _isCompleted = true;
+            _activePointerId = NoPointerId;
             _holdProgress = 1f;
             ApplyProgress(1f);
             PlayCompletionSound();
@@ -235,6 +284,7 @@ namespace NanokaGame.UI
             }
 
             _isHolding = false;
+            _activePointerId = NoPointerId;
         }
 
         private void ResetInteraction()
@@ -244,6 +294,7 @@ namespace NanokaGame.UI
             _isCompleted = false;
             _quitRequested = false;
             _completionSoundPlayCount = 0;
+            _activePointerId = NoPointerId;
             ApplyProgress(0f);
 
             if (_checkObject != null)
@@ -282,6 +333,16 @@ namespace NanokaGame.UI
 
             StopCoroutine(_quitRoutine);
             _quitRoutine = null;
+        }
+
+        private bool IsActivePointer(PointerEventData eventData)
+        {
+            return _isHolding && _activePointerId == GetPointerId(eventData);
+        }
+
+        private static int GetPointerId(PointerEventData eventData)
+        {
+            return eventData != null ? eventData.pointerId : NoPointerId;
         }
 
         private bool ValidateReferences()

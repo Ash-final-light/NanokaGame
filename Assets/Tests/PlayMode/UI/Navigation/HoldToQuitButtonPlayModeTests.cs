@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using NanokaGame.UI;
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.TestTools;
 using UnityEngine.UI;
 
@@ -111,6 +112,26 @@ namespace NanokaGame.Tests.PlayMode.UI
                     false));
         }
 
+        [Test]
+        public void ShouldHideOnPlatform_WhenRunningOnIos_ReturnsConfiguredValue()
+        {
+            Assert.That(
+                HoldToQuitButton.ShouldHideOnPlatform(
+                    RuntimePlatform.IPhonePlayer,
+                    true),
+                Is.True);
+            Assert.That(
+                HoldToQuitButton.ShouldHideOnPlatform(
+                    RuntimePlatform.IPhonePlayer,
+                    false),
+                Is.False);
+            Assert.That(
+                HoldToQuitButton.ShouldHideOnPlatform(
+                    RuntimePlatform.Android,
+                    true),
+                Is.False);
+        }
+
         [UnityTest]
         public IEnumerator PointerDown_WhenHeld_IncreasesProgress()
         {
@@ -186,6 +207,41 @@ namespace NanokaGame.Tests.PlayMode.UI
 
             Assert.That(fixture.Controller.IsHolding, Is.True);
             Assert.That(fixture.Controller.HoldProgress, Is.GreaterThan(progressDuringDecay));
+        }
+
+        [UnityTest]
+        public IEnumerator PointerUp_FromDifferentTouch_DoesNotCancelActiveHold()
+        {
+            HoldFixture fixture = CreateFixture(1f, 1f, ShortQuitDelay);
+            PointerEventData primaryTouch = CreateTouchEvent(4);
+            PointerEventData secondaryTouch = CreateTouchEvent(9);
+
+            fixture.Controller.OnPointerDown(primaryTouch);
+            yield return new WaitForSecondsRealtime(0.05f);
+            fixture.Controller.OnPointerUp(secondaryTouch);
+
+            Assert.That(fixture.Controller.IsHolding, Is.True);
+            Assert.That(fixture.Controller.ActivePointerId, Is.EqualTo(4));
+
+            fixture.Controller.OnPointerUp(primaryTouch);
+
+            Assert.That(fixture.Controller.IsHolding, Is.False);
+            Assert.That(fixture.Controller.ActivePointerId, Is.EqualTo(int.MinValue));
+        }
+
+        [UnityTest]
+        public IEnumerator ApplicationPause_DuringTouch_StopsHoldAndKeepsDecayProgress()
+        {
+            HoldFixture fixture = CreateFixture(1f, 1f, ShortQuitDelay);
+            PointerEventData touch = CreateTouchEvent(3);
+
+            fixture.Controller.OnPointerDown(touch);
+            yield return new WaitForSecondsRealtime(0.05f);
+            fixture.Root.SendMessage("OnApplicationPause", true);
+
+            Assert.That(fixture.Controller.IsHolding, Is.False);
+            Assert.That(fixture.Controller.ActivePointerId, Is.EqualTo(int.MinValue));
+            Assert.That(fixture.Controller.HoldProgress, Is.GreaterThan(0f));
         }
 
         [UnityTest]
@@ -279,6 +335,15 @@ namespace NanokaGame.Tests.PlayMode.UI
                 checkObject,
                 audioSource,
                 completionClip);
+        }
+
+        private static PointerEventData CreateTouchEvent(int pointerId)
+        {
+            return new PointerEventData(null)
+            {
+                pointerId = pointerId,
+                button = PointerEventData.InputButton.Left
+            };
         }
 
         private sealed class HoldFixture
