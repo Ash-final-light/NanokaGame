@@ -14,6 +14,7 @@ namespace NanokaGame.Tests.PlayMode.UI
         private const float ShortHoldDuration = 0.08f;
         private const float ShortDecayDuration = 0.12f;
         private const float ShortQuitDelay = 0.05f;
+        private const float CompletionQuitDelay = 0.25f;
 
         private readonly List<UnityEngine.Object> _createdObjects =
             new List<UnityEngine.Object>();
@@ -193,7 +194,7 @@ namespace NanokaGame.Tests.PlayMode.UI
             HoldFixture fixture = CreateFixture(
                 ShortHoldDuration,
                 ShortDecayDuration,
-                ShortQuitDelay);
+                CompletionQuitDelay);
 
             fixture.Controller.OnPointerDown(null);
             yield return new WaitForSecondsRealtime(ShortHoldDuration + 0.05f);
@@ -211,7 +212,7 @@ namespace NanokaGame.Tests.PlayMode.UI
 
             Assert.That(fixture.Controller.CompletionSoundPlayCount, Is.EqualTo(1));
 
-            yield return new WaitForSecondsRealtime(ShortQuitDelay + 0.03f);
+            yield return new WaitForSecondsRealtime(CompletionQuitDelay + 0.03f);
 
             Assert.That(fixture.Controller.QuitRequested, Is.True);
         }
