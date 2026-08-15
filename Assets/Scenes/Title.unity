@@ -3112,6 +3112,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1707010301}
   - component: {fileID: 1707010302}
+  - component: {fileID: 1707010303}
   m_Layer: 5
   m_Name: Exit
   m_TagString: Untagged
@@ -3162,6 +3163,25 @@ MonoBehaviour:
   _decayDuration: 1.5
   _quitDelay: 1
   _quitApplication: 1
+  _hideOnIos: 1
+--- !u!114 &1707010303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1707010300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc4fee0aed02eae4b94318d52003c9a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _target: {fileID: 1707010301}
+  _applyLeftInset: 0
+  _applyRightInset: 1
+  _applyTopInset: 0
+  _applyBottomInset: 1
+  _additionalPadding: {x: 0, y: 0}
 --- !u!1 &1734189958
 GameObject:
   m_ObjectHideFlags: 0
