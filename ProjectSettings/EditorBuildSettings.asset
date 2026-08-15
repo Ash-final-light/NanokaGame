@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Klotski.unity
     guid: 16a7708cf4616fe44a722cb32d753c7b
+  - enabled: 1
+    path: Assets/Scenes/Jigsaw.unity
+    guid: 4e643d96768ad8646ac646498d86dd4c
   m_configObjects: {}
