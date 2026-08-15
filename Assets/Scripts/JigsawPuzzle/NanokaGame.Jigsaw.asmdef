@@ -1,7 +1,10 @@
 {
     "name": "NanokaGame.Jigsaw",
     "rootNamespace": "NanokaGame.Games.Jigsaw",
-    "references": [],
+    "references": [
+        "UnityEngine.UI",
+        "Unity.TextMeshPro"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
