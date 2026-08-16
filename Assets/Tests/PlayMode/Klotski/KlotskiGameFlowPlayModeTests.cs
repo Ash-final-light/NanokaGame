@@ -173,8 +173,8 @@ namespace NanokaGame.Tests.PlayMode.Klotski
             Assert.That(fixture.CompletionRoot.activeSelf, Is.True);
             Assert.That(fixture.AudioFeedback.PlayCount, Is.EqualTo(2));
             Assert.That(fixture.AudioFeedback.LastPlayedClip, Is.SameAs(fixture.VictoryClip));
-            Assert.That(fixture.CompletionStepText.text, Is.EqualTo("步数：1"));
-            Assert.That(fixture.CompletionTimeText.text, Does.StartWith("用时："));
+            Assert.That(fixture.CompletionStepText.text, Is.EqualTo("Steps：1"));
+            Assert.That(fixture.CompletionTimeText.text, Does.StartWith("Time："));
             Assert.That(
                 fixture.Controller.TryBeginDrag(targetView, PointerId + 1, targetView.transform.position),
                 Is.False);

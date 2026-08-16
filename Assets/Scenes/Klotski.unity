@@ -447,7 +447,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4291946741
   m_fontColor: {r: 0.96, g: 0.91, b: 0.82, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -460,7 +460,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -839,9 +839,9 @@ RectTransform:
   - {fileID: 1478951920}
   m_Father: {fileID: 960098035}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -285.99994, y: 50}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 100, y: 220}
   m_SizeDelta: {x: 200, y: 36}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &296806224
@@ -1661,9 +1661,9 @@ RectTransform:
   - {fileID: 2111907673}
   m_Father: {fileID: 960098035}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -285.99997, y: 6.9999924}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 100, y: 271}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &798027142
@@ -2834,7 +2834,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 10
@@ -2909,9 +2909,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 996965995}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -107.00003, y: 130.99872}
+  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -93, y: -315}
   m_SizeDelta: {x: 186, y: 189.9674}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1104512310
@@ -2934,7 +2934,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u62D6\u52A8\u68CB\u5B50\u79FB\u52A8\u3002\n\u4E0D\u80FD\u91CD\u53E0\u6216\u79BB\u5F00\u68CB\u76D8\u3002\n\u5C06\u4E2D\u592E\u68CB\u5B50\u79FB\u52A8\u5230\u5E95\u90E8\u51FA\u53E3\u3002"
+  m_text: "\u5C06\u5948\u53F6\u9999\u5934\u90E8\u79FB\u81F3\u5904\u5211\u53F0\u5373\u53EF\u83B7\u80DC"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a59e399be28266c4bb9c36b285566c15, type: 2}
   m_sharedMaterial: {fileID: 6388489552965767520, guid: a59e399be28266c4bb9c36b285566c15, type: 2}
@@ -3223,7 +3223,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4291946741
   m_fontColor: {r: 0.96, g: 0.91, b: 0.82, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -3543,7 +3543,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4291946741
   m_fontColor: {r: 0.96, g: 0.91, b: 0.82, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -3556,7 +3556,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -3668,7 +3668,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u5F53\u524D\u6B65\u6570\uFF1A"
+  m_text: 'Steps:'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e4216770aeac62f49b81fb1ae61c16fb, type: 2}
   m_sharedMaterial: {fileID: -2346841652358625670, guid: e4216770aeac62f49b81fb1ae61c16fb, type: 2}
@@ -4070,7 +4070,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u7528\u65F6\uFF1A00:00"
+  m_text: "Time\uFF1A00:00"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e4216770aeac62f49b81fb1ae61c16fb, type: 2}
   m_sharedMaterial: {fileID: -2346841652358625670, guid: e4216770aeac62f49b81fb1ae61c16fb, type: 2}
@@ -4079,7 +4079,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4291946741
   m_fontColor: {r: 0.96, g: 0.91, b: 0.82, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -4092,7 +4092,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -4666,7 +4666,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u6B65\u6570\uFF1A0"
+  m_text: "Steps\uFF1A0"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e4216770aeac62f49b81fb1ae61c16fb, type: 2}
   m_sharedMaterial: {fileID: -2346841652358625670, guid: e4216770aeac62f49b81fb1ae61c16fb, type: 2}
@@ -4675,7 +4675,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4291946741
   m_fontColor: {r: 0.96, g: 0.91, b: 0.82, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -4688,7 +4688,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2

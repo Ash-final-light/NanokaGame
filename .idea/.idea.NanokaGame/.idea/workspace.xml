@@ -4,7 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="93506c3f-5ac7-44cd-a374-5bac5b038fa7" name="更改" comment="" />
+    <list default="true" id="93506c3f-5ac7-44cd-a374-5bac5b038fa7" name="更改" comment="">
+      <change beforePath="$PROJECT_DIR$/.codex/config.toml" beforeDir="false" afterPath="$PROJECT_DIR$/.codex/config.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.NanokaGame/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.NanokaGame/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Arts/Font/PixelMplus10 SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Arts/Font/PixelMplus10 SDF.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Arts/Font/SourceHanSerifSC SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Arts/Font/SourceHanSerifSC SDF.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Arts/Font/TsukushiMincho SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Arts/Font/TsukushiMincho SDF.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Jigsaw.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Jigsaw.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Klotski.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Klotski.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Title.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Title.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Klotski/Presentation/UI/KlotskiHudView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Klotski/Presentation/UI/KlotskiHudView.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Tests/PlayMode/Klotski/KlotskiGameFlowPlayModeTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Tests/PlayMode/Klotski/KlotskiGameFlowPlayModeTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Resources/Fonts &amp; Materials/LiberationSans SDF - Fallback.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Resources/Fonts &amp; Materials/LiberationSans SDF - Fallback.asset" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -12,6 +24,9 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.test-framework@1.1.33/UnityEditor.TestRunner/TestRun/Tasks/PerformUndoTask.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7
@@ -26,6 +41,7 @@
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "git-widget-placeholder": "develop__code",
     "ignore.virus.scanning.warn.message": "true",
@@ -84,6 +100,7 @@
       <option name="presentableId" value="Default" />
       <updated>1784665349867</updated>
       <workItem from="1784665349868" duration="1633000" />
+      <workItem from="1786433065072" duration="1248000" />
     </task>
     <servers />
   </component>

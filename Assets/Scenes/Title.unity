@@ -515,10 +515,10 @@ RectTransform:
   - {fileID: 544525950}
   m_Father: {fileID: 893993143}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.5}
-  m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 225, y: -74}
-  m_SizeDelta: {x: 450, y: 213.7057}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 276, y: 127}
+  m_SizeDelta: {x: 450, y: 165}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &394229589
 GameObject:
@@ -889,7 +889,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 181, y: -88.936}
+  m_AnchoredPosition: {x: 222, y: -88.936}
   m_SizeDelta: {x: 310.4372, y: 161.0376}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &513495461
@@ -1557,7 +1557,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -2170,7 +2170,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -2519,7 +2519,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u62FC\u56FE(dev)"
+  m_text: "\u62FC\u56FE\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a59e399be28266c4bb9c36b285566c15, type: 2}
   m_sharedMaterial: {fileID: 6388489552965767520, guid: a59e399be28266c4bb9c36b285566c15, type: 2}
@@ -3981,7 +3981,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u534E\u5BB9\u9053(done)"
+  m_text: "\u534E\u5BB9\u9053"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a59e399be28266c4bb9c36b285566c15, type: 2}
   m_sharedMaterial: {fileID: 6388489552965767520, guid: a59e399be28266c4bb9c36b285566c15, type: 2}

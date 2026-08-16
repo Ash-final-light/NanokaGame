@@ -102,12 +102,12 @@ namespace NanokaGame.Games.Klotski.UI
 
             if (_completionTimeText != null)
             {
-                _completionTimeText.SetText("用时：" + FormatElapsedTime(elapsedTimeSeconds));
+                _completionTimeText.SetText("Time：" + FormatElapsedTime(elapsedTimeSeconds));
             }
 
             if (_completionStepText != null)
             {
-                _completionStepText.SetText("步数：" + moveCount);
+                _completionStepText.SetText("Steps：" + moveCount);
             }
 
             if (_completionRoot != null)
